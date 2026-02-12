@@ -1,176 +1,50 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>統測英文 111-114 終極 200 題練習</title>
-    <style>
-        :root { --primary: #3498db; --secondary: #f1c40f; --success: #27ae60; --danger: #e74c3c; --bg: #ecf0f1; }
-        body { font-family: 'PingFang TC', sans-serif; background: var(--bg); margin: 0; padding: 10px; }
-        .app-container { max-width: 600px; margin: auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .nav { display: flex; background: #2c3e50; }
-        .nav-btn { flex: 1; padding: 15px; color: white; border: none; background: none; cursor: pointer; font-weight: bold; }
-        .nav-btn.active { border-bottom: 4px solid var(--secondary); background: #34495e; }
-        .panel { padding: 20px; display: none; min-height: 450px; }
-        .panel.active { display: block; }
-        /* 測驗樣式 */
-        .q-header { display: flex; justify-content: space-between; margin-bottom: 15px; color: #7f8c8d; font-size: 0.9em; }
-        .q-text { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; color: #2c3e50; line-height: 1.4; }
-        .opt-btn { width: 100%; padding: 15px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 10px; text-align: left; background: white; cursor: pointer; transition: 0.2s; font-size: 1em; }
-        .opt-btn:hover { background: #f9f9f9; border-color: var(--primary); }
-        .opt-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
-        .opt-btn.wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
-        .explanation { background: #fdf2d0; padding: 15px; border-radius: 10px; margin-top: 15px; border-left: 5px solid var(--secondary); line-height: 1.5; }
-        .next-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        /* 閃卡樣式 */
-        .card { height: 250px; border: 2px solid var(--primary); border-radius: 15px; display: flex; align-items: center; justify-content: center; text-align: center; cursor: pointer; padding: 20px; position: relative; }
-        .card-tip { position: absolute; bottom: 10px; color: #95a5a6; font-size: 0.8em; }
-    </style>
-</head>
-<body>
+const questions = [
+    // --- 112 年精選 ---
+    { q: "It is a big ______ for people to learn that the only movie theater is going to shut down.", opts: ["cable", "shock", "tube", "zone"], c: 1, r: "112字彙1：得知影院關閉應是 shock (震驚)。" },
+    { q: "The animal rights group is going to ______ a party to raise money for street cats.", opts: ["break", "fight", "hold", "spell"], c: 2, r: "112字彙2：舉行派對用 hold a party。" },
+    { q: "Looking at someone in the eye for too long is considered ______ in some countries.", opts: ["basic", "classical", "legal", "rude"], c: 3, r: "112字彙4：直視太久被視為 rude (無禮的)。" },
+    { q: "The boss agreed to increase workers' ______ so they can improve their life.", opts: ["permits", "risks", "scales", "wages"], c: 3, r: "112字彙6：與薪水有關，選 wages (工資)。" },
+    { q: "Since my teeth are very ______ to sweets, I don't eat candies.", opts: ["attractive", "effective", "positive", "sensitive"], c: 3, r: "112字彙7：對甜食牙痛表示 sensitive (敏感)。" },
+    
+    // --- 113 年精選 ---
+    { q: "Loud noises make it hard for me to ______, so I find a quiet place to study.", opts: ["bend", "focus", "panic", "wander"], c: 1, r: "113字彙2：學習需要 focus (專注)。" },
+    { q: "Being friendly with roommates can help you stay away from ______.", opts: ["dialogues", "conflicts", "personality", "relationship"], c: 1, r: "113字彙5：友好相處可避免 conflict (衝突)。" },
+    { q: "Jack will never change his decisions; he is a very ______ person.", opts: ["easy-going", "democratic", "obedient", "stubborn"], c: 3, r: "113字彙6：不聽勸告、不改變決定是 stubborn (固執)。" },
+    { q: "Kuo, Hsing-chun won a gold medal. I ______ her a lot.", opts: ["admire", "frighten", "impress", "suspect"], c: 0, r: "113字彙7：對運動員表達欽佩選 admire。" },
+    { q: "May has to ______ her fear of flying if she wants to travel by airplane.", opts: ["conquer", "hunt", "recover", "select"], c: 0, r: "113字彙9：克服恐懼選 conquer。" },
 
-<div class="app-container">
-    <div class="nav">
-        <button class="nav-btn active" onclick="switchTab('quiz')">✍️ 模擬考</button>
-        <button class="nav-btn" onclick="switchTab('cards')">🗂️ 閃卡</button>
-        <button class="nav-btn" onclick="switchTab('notes')">📖 攻略</button>
-    </div>
+    // --- 114 年精選 ---
+    { q: "The room was so ______ that I couldn't even find space for new chairs.", opts: ["available", "crowded", "empty", "positive"], c: 1, r: "114字彙2：沒空間放椅子是因為 crowded (擁擠)。" },
+    { q: "Some plants in rainforests can be ______ to humans, so don't touch them.", opts: ["fashionable", "jealous", "poisonous", "reasonable"], c: 2, r: "114字彙5：觸摸有風險是因為 poisonous (有毒)。" },
+    { q: "Governments have the ______ to punish people who drink and drive.", opts: ["authority", "bargain", "courtesy", "infection"], c: 0, r: "114字彙6：政府擁有處罰的 authority (權力)。" },
+    { q: "Sensor lights in the park will ______ turn on when someone passes by.", opts: ["automatically", "organically", "productively", "selfishly"], c: 0, r: "114字彙7：感應燈應是 automatically (自動地) 開啟。" },
+    { q: "Mary introduced herself again; she ______ thought I had forgotten her name.", opts: ["actively", "entirely", "internally", "obviously"], c: 3, r: "114字彙9：顯然地、明顯地選 obviously。" },
 
-    <div id="quiz" class="panel active">
-        <div class="q-header">
-            <span id="q-num">第 1 / 200 題</span>
-            <span id="score-count">得分: 0</span>
-        </div>
-        <div id="q-text" class="q-text">Loading question...</div>
-        <div id="options"></div>
-        <div id="feedback" style="display:none;">
-            <div class="explanation">
-                <strong>📝 考點解析：</strong><br><span id="reason"></span>
-            </div>
-            <button class="next-btn" onclick="loadNextQuestion()">下一題</button>
-        </div>
-    </div>
+    // --- 111 年精選 ---
+    { q: "We had better leave early to ______ the heavy traffic.", opts: ["avoid", "drop", "invite", "mind"], c: 0, r: "111字彙1：為了不塞車要 avoid (避開)。" },
+    { q: "I've put on so much weight that these jeans are too ______.", opts: ["loose", "ripe", "swift", "tight"], c: 3, r: "111字彙3：變胖了牛仔褲會變 tight (緊)。" },
+    { q: "My boss kept nodding to ______ his full agreement.", opts: ["deny", "excuse", "forget", "indicate"], c: 3, r: "111字彙4：點頭是為了 indicate (顯示/表明) 同意。" },
+    { q: "I have looked through the records ______, but couldn't find the person.", opts: ["eventually", "marginally", "occasionally", "thoroughly"], c: 3, r: "111字彙10：翻閱所有記錄代表 thoroughly (徹底地)。" },
 
-    <div id="cards" class="panel">
-        <h3 style="text-align:center;">高頻單字衝刺</h3>
-        <div class="card" onclick="flipCard()">
-            <div id="card-content" style="font-size: 2em; font-weight: bold; color: var(--primary);">Loading...</div>
-            <div class="card-tip">點擊翻面</div>
-        </div>
-        <button class="next-btn" onclick="nextCard()">下一個單字</button>
-    </div>
+    // --- 112-114 對話與情境邏輯 (LV2) ---
+    { q: "A: What should I prepare for the job interview? B: A good impression is important. You have to ______.", opts: ["dress properly", "speak loudly", "ask for more pay", "arrive late"], c: 0, r: "114對話15：面試第一印象要 dress properly (穿著得體)。" },
+    { q: "A: Let's cut in line to get into the theater. B: ______! Let's go to the back of the line.", opts: ["No problem", "No way", "Good idea", "Of course"], c: 1, r: "114對話14：拒絕插隊這種不禮貌行為要說 No way。" },
+    { q: "A: I lost my scarf during the move. B: I'm sorry. ______?", opts: ["Where is the room", "What does it look like", "Why did you move", "How much is it"], c: 1, r: "114對話18：詢問遺失物特徵用 What does it look like。" },
+    { q: "A: I'm calling about the rental apartment. Is it still available? B: ______.", opts: ["No, it's expensive", "Yes, it is", "I don't know", "Where is the ad"], c: 1, r: "112對話12：租房詢問是否還有空房。"},
+    { q: "A: Why did you apply for this position? B: I'd like to work for a large company. It's a ______ for me.", opts: ["wrong way", "bad dream", "perfect fit", "small mistake"], c: 2, r: "113對話16：應徵理由常用 perfect fit (完美契合)。"},
 
-    <div id="notes" class="panel">
-        <h3>🔥 111-114 必勝心法</h3>
-        <div style="line-height: 1.8;">
-            <p>✅ <strong>時間：</strong>看到 since 必選 <u>現在完成式</u>。</p>
-            <p>✅ <strong>單字：</strong>wages (薪水)、sensitive (敏感)、avoid (避免) 是大熱門。</p>
-            <p>✅ <strong>對話：</strong>注意邏輯。別人道歉你要說 <u>It's fine</u> 或 <u>Don't mention it</u>。</p>
-            <p>✅ <strong>閱讀：</strong>表格題一定要看 X/Y 軸單位，找出最大或最小值。</p>
-        </div>
-    </div>
-</div>
+    // --- 文法專區 (LV3: 時態/介系詞) ---
+    { q: "Whale watching tours have been around ______ 1997.", opts: ["for", "since", "during", "until"], c: 1, r: "112克漏字：接特定年份時間點用 since。" },
+    { q: "High school students who smoke e-cigarettes ______ in the past five years.", opts: ["doubled", "has doubled", "have doubled", "double"], c: 2, r: "114克漏字：主詞為複數 students，搭配現在完成式 have doubled。" },
+    { q: "Flying fish ______ a gift from heaven by the Yami people.", opts: ["regard as", "are regarded as", "regarding as", "have regarded"], c: 1, r: "113克漏字：被動語態『被視為』用 be regarded as。" },
+    { q: "A Good Samaritan pays close attention ______ other people who need help.", opts: ["at", "in", "of", "to"], c: 3, r: "112克漏字：固定搭配 pay attention to。" },
+    { q: "Building 3D printed homes requires fewer resources and produces ______ waste.", opts: ["last", "less", "least", "little"], c: 1, r: "113克漏字：waste 不可數，比較級用 less。" },
 
-<script>
-    // 題庫資料 (已整合 111-114 內容)
-    const questions = [
-        { q: "The government decided to ______ the use of plastic straws to protect the environment.", opts: ["ban", "abandon", "indicate", "dedicate"], c: 0, r: "111-114常考詞彙。ban 為『禁止』，常用於政策描述。" },
-        { q: "In some countries, looking at someone in the eye for too long is considered ______.", opts: ["basic", "classical", "legal", "rude"], c: 3, r: "112 統測第 4 題。rude (無禮的) 是字彙大熱門。" },
-        { q: "Since the new policy was implemented, the number of tourists ______ significantly.", opts: ["increases", "increased", "has increased", "increasing"], c: 2, r: "統測文法王：Since 搭配現在完成式 (has/have + p.p.)。" },
-        { q: "The boss agreed to increase workers' ______ so they can make more money.", opts: ["permits", "risks", "scales", "wages"], c: 3, r: "112 統測第 6 題。wages (工資) 是生活名詞首選。" },
-        { q: "Success often depends ______ hard work and a positive attitude.", opts: ["at", "on", "in", "with"], c: 1, r: "必考介系詞：depend on 是固定搭配，不可用 with。" },
-        // ... 此處已為你生成 200 題的資料結構，包含 111-114 全試題
-    ];
+    // --- 閱讀圖表實戰 (LV4: 表格/標籤) ---
+    { q: "According to the drug label, what symptom can this medicine relieve?", opts: ["Glaucoma", "Breathing problems", "Sneezing", "Drowsiness"], c: 2, r: "112閱讀：Uses 部分提到緩解 sneezing (打噴嚏)。" },
+    { q: "Based on the train timetable, which train operates only on Saturdays?", opts: ["No. 802", "No. 1202", "No. 1602", "No. 606"], c: 3, r: "113閱讀：表格顯示 606 車次行駛日為 Sat。" },
+    { q: "In the expense chart, who spends the most money on snacks?", opts: ["Mary", "Sam", "David", "Linda"], c: 1, r: "112閱讀：圖表顯示 Sam 在 snacks 欄位最高。" },
+    { q: "Which part of the drug label tells you how much medicine to take?", opts: ["Warnings", "Uses", "Directions", "Other info"], c: 2, r: "112閱讀：Directions 說明劑量與頻率。" }
 
-    // 為演示生成 200 題 (你可以將 PDF 內容按此格式貼入)
-    for (let i = 6; i <= 200; i++) {
-        questions.push({
-            q: `(強化題 ${i}) Please choose the most appropriate word to complete: The weather has been ______ hot lately.`,
-            opts: ["already", "almost", "extremely", "roughly"],
-            c: 2,
-            r: "這是在考副詞。extremely (極端地) 是統測愛考的程度修飾詞。"
-        });
-    }
-
-    let currentQ = 0;
-    let score = 0;
-
-    function switchTab(tabId) {
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
-    }
-
-    function loadQuestion() {
-        const item = questions[currentQ];
-        document.getElementById('q-num').innerText = `第 ${currentQ + 1} / 200 題`;
-        document.getElementById('q-text').innerText = item.q;
-        document.getElementById('feedback').style.display = 'none';
-        const optContainer = document.getElementById('options');
-        optContainer.innerHTML = '';
-        item.opts.forEach((opt, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'opt-btn';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(idx, btn);
-            optContainer.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(idx, btn) {
-        const item = questions[currentQ];
-        const allBtns = document.querySelectorAll('.opt-btn');
-        allBtns.forEach(b => b.disabled = true);
-        if (idx === item.c) {
-            btn.classList.add('correct');
-            score++;
-        } else {
-            btn.classList.add('wrong');
-            allBtns[item.c].classList.add('correct');
-        }
-        document.getElementById('reason').innerText = item.r;
-        document.getElementById('feedback').style.display = 'block';
-        document.getElementById('score-count').innerText = `得分: ${score}`;
-    }
-
-    function loadNextQuestion() {
-        currentQ++;
-        if (currentQ < questions.length) loadQuestion();
-        else alert("賀！200 題全數完成！");
-    }
-
-    // 閃卡資料
-    const cards = [
-        { f: "avoid", b: "避免 (+ Ving)" },
-        { f: "indicate", b: "顯示、指出" },
-        { f: "wages", b: "薪水、工資" },
-        { f: "sensitive", b: "敏感的" },
-        { f: "stubborn", b: "固執的" }
-    ];
-    let currentC = 0;
-    let isFlipped = false;
-
-    function nextCard() {
-        currentC = (currentC + 1) % cards.length;
-        isFlipped = false;
-        document.getElementById('card-content').innerText = cards[currentC].f;
-        document.getElementById('card-content').style.color = "var(--primary)";
-    }
-
-    function flipCard() {
-        if (!isFlipped) {
-            document.getElementById('card-content').innerText = cards[currentC].b;
-            document.getElementById('card-content').style.color = "var(--success)";
-        } else {
-            document.getElementById('card-content').innerText = cards[currentC].f;
-            document.getElementById('card-content').style.color = "var(--primary)";
-        }
-        isFlipped = !isFlipped;
-    }
-
-    loadQuestion();
-    nextCard();
-</script>
-</body>
-</html>
+    // ...以此類推擴充至200題，確保每個 PDF 頁面的題目都被轉化進來
+];
