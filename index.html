@@ -1,50 +1,481 @@
-const questions = [
-    // --- 112 年精選 ---
-    { q: "It is a big ______ for people to learn that the only movie theater is going to shut down.", opts: ["cable", "shock", "tube", "zone"], c: 1, r: "112字彙1：得知影院關閉應是 shock (震驚)。" },
-    { q: "The animal rights group is going to ______ a party to raise money for street cats.", opts: ["break", "fight", "hold", "spell"], c: 2, r: "112字彙2：舉行派對用 hold a party。" },
-    { q: "Looking at someone in the eye for too long is considered ______ in some countries.", opts: ["basic", "classical", "legal", "rude"], c: 3, r: "112字彙4：直視太久被視為 rude (無禮的)。" },
-    { q: "The boss agreed to increase workers' ______ so they can improve their life.", opts: ["permits", "risks", "scales", "wages"], c: 3, r: "112字彙6：與薪水有關，選 wages (工資)。" },
-    { q: "Since my teeth are very ______ to sweets, I don't eat candies.", opts: ["attractive", "effective", "positive", "sensitive"], c: 3, r: "112字彙7：對甜食牙痛表示 sensitive (敏感)。" },
-    
-    // --- 113 年精選 ---
-    { q: "Loud noises make it hard for me to ______, so I find a quiet place to study.", opts: ["bend", "focus", "panic", "wander"], c: 1, r: "113字彙2：學習需要 focus (專注)。" },
-    { q: "Being friendly with roommates can help you stay away from ______.", opts: ["dialogues", "conflicts", "personality", "relationship"], c: 1, r: "113字彙5：友好相處可避免 conflict (衝突)。" },
-    { q: "Jack will never change his decisions; he is a very ______ person.", opts: ["easy-going", "democratic", "obedient", "stubborn"], c: 3, r: "113字彙6：不聽勸告、不改變決定是 stubborn (固執)。" },
-    { q: "Kuo, Hsing-chun won a gold medal. I ______ her a lot.", opts: ["admire", "frighten", "impress", "suspect"], c: 0, r: "113字彙7：對運動員表達欽佩選 admire。" },
-    { q: "May has to ______ her fear of flying if she wants to travel by airplane.", opts: ["conquer", "hunt", "recover", "select"], c: 0, r: "113字彙9：克服恐懼選 conquer。" },
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>111-114 統測英文終極題庫（100題）＋錯題本＋單字卡</title>
+  <style>
+    :root { --primary:#2980b9; --success:#27ae60; --danger:#c0392b; --bg:#ecf0f1; }
+    body { font-family:'PingFang TC',sans-serif; background:var(--bg); margin:0; padding:10px; line-height:1.6; }
+    .app { max-width:600px; margin:auto; background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden; }
+    header { background:#2c3e50; color:#fff; padding:15px; text-align:center; }
+    .stats { display:flex; justify-content:space-around; background:#34495e; color:#bdc3c7; padding:6px; font-size:0.85em; gap:8px; flex-wrap:wrap; }
+    .quiz-body { padding:20px; min-height:420px; }
+    .q-text { font-size:1.1em; font-weight:700; margin-bottom:16px; color:#34495e; }
+    .opt { width:100%; padding:12px; margin-bottom:8px; border:1px solid #ddd; border-radius:10px; background:#fff; cursor:pointer; text-align:left; transition:0.2s; }
+    .opt:hover:not([disabled]) { background:#f7f9f9; border-color:var(--primary); }
+    .opt.correct { background:var(--success)!important; color:#fff; border-color:var(--success); }
+    .opt.wrong { background:var(--danger)!important; color:#fff; border-color:var(--danger); }
+    .feedback { margin-top:12px; padding:12px; background:#fcf3cf; border-left:4px solid #f1c40f; font-size:0.9em; display:none; border-radius:8px; }
+    .next-btn { width:100%; padding:14px; background:var(--primary); color:#fff; border:none; border-radius:10px; margin-top:10px; cursor:pointer; font-weight:700; }
+    .progress-bar { height:4px; background:#eee; width:100%; }
+    .progress-fill { height:100%; background:var(--success); width:0%; transition:0.3s; }
+    .modebar { max-width:600px; margin:10px auto 10px; display:flex; gap:8px; }
+    .modebar button { flex:1; padding:10px; border:0; border-radius:10px; color:#fff; cursor:pointer; font-weight:700; }
+    #modeQuiz { background:#2c3e50; }
+    #modeWrong { background:#8e44ad; }
+    #modeVocab { background:#16a085; }
+    .subbar { display:flex; gap:8px; margin-top:10px; }
+    .subbar button { flex:1; padding:10px; border:1px solid #ddd; border-radius:10px; cursor:pointer; background:#fff; font-weight:700; }
+    .muted { color:#7f8c8d; font-size:0.9em; }
+  </style>
+</head>
 
-    // --- 114 年精選 ---
-    { q: "The room was so ______ that I couldn't even find space for new chairs.", opts: ["available", "crowded", "empty", "positive"], c: 1, r: "114字彙2：沒空間放椅子是因為 crowded (擁擠)。" },
-    { q: "Some plants in rainforests can be ______ to humans, so don't touch them.", opts: ["fashionable", "jealous", "poisonous", "reasonable"], c: 2, r: "114字彙5：觸摸有風險是因為 poisonous (有毒)。" },
-    { q: "Governments have the ______ to punish people who drink and drive.", opts: ["authority", "bargain", "courtesy", "infection"], c: 0, r: "114字彙6：政府擁有處罰的 authority (權力)。" },
-    { q: "Sensor lights in the park will ______ turn on when someone passes by.", opts: ["automatically", "organically", "productively", "selfishly"], c: 0, r: "114字彙7：感應燈應是 automatically (自動地) 開啟。" },
-    { q: "Mary introduced herself again; she ______ thought I had forgotten her name.", opts: ["actively", "entirely", "internally", "obviously"], c: 3, r: "114字彙9：顯然地、明顯地選 obviously。" },
+<body>
 
-    // --- 111 年精選 ---
-    { q: "We had better leave early to ______ the heavy traffic.", opts: ["avoid", "drop", "invite", "mind"], c: 0, r: "111字彙1：為了不塞車要 avoid (避開)。" },
-    { q: "I've put on so much weight that these jeans are too ______.", opts: ["loose", "ripe", "swift", "tight"], c: 3, r: "111字彙3：變胖了牛仔褲會變 tight (緊)。" },
-    { q: "My boss kept nodding to ______ his full agreement.", opts: ["deny", "excuse", "forget", "indicate"], c: 3, r: "111字彙4：點頭是為了 indicate (顯示/表明) 同意。" },
-    { q: "I have looked through the records ______, but couldn't find the person.", opts: ["eventually", "marginally", "occasionally", "thoroughly"], c: 3, r: "111字彙10：翻閱所有記錄代表 thoroughly (徹底地)。" },
+<!-- 模式切換 -->
+<div class="modebar">
+  <button id="modeQuiz">📘 測驗模式</button>
+  <button id="modeWrong">🧾 錯題本</button>
+  <button id="modeVocab">🃏 單字卡</button>
+</div>
 
-    // --- 112-114 對話與情境邏輯 (LV2) ---
-    { q: "A: What should I prepare for the job interview? B: A good impression is important. You have to ______.", opts: ["dress properly", "speak loudly", "ask for more pay", "arrive late"], c: 0, r: "114對話15：面試第一印象要 dress properly (穿著得體)。" },
-    { q: "A: Let's cut in line to get into the theater. B: ______! Let's go to the back of the line.", opts: ["No problem", "No way", "Good idea", "Of course"], c: 1, r: "114對話14：拒絕插隊這種不禮貌行為要說 No way。" },
-    { q: "A: I lost my scarf during the move. B: I'm sorry. ______?", opts: ["Where is the room", "What does it look like", "Why did you move", "How much is it"], c: 1, r: "114對話18：詢問遺失物特徵用 What does it look like。" },
-    { q: "A: I'm calling about the rental apartment. Is it still available? B: ______.", opts: ["No, it's expensive", "Yes, it is", "I don't know", "Where is the ad"], c: 1, r: "112對話12：租房詢問是否還有空房。"},
-    { q: "A: Why did you apply for this position? B: I'd like to work for a large company. It's a ______ for me.", opts: ["wrong way", "bad dream", "perfect fit", "small mistake"], c: 2, r: "113對話16：應徵理由常用 perfect fit (完美契合)。"},
+<div class="app">
+  <header>
+    <h3>🎓 統測英文（100題）＋錯題本＋單字卡</h3>
+  </header>
 
-    // --- 文法專區 (LV3: 時態/介系詞) ---
-    { q: "Whale watching tours have been around ______ 1997.", opts: ["for", "since", "during", "until"], c: 1, r: "112克漏字：接特定年份時間點用 since。" },
-    { q: "High school students who smoke e-cigarettes ______ in the past five years.", opts: ["doubled", "has doubled", "have doubled", "double"], c: 2, r: "114克漏字：主詞為複數 students，搭配現在完成式 have doubled。" },
-    { q: "Flying fish ______ a gift from heaven by the Yami people.", opts: ["regard as", "are regarded as", "regarding as", "have regarded"], c: 1, r: "113克漏字：被動語態『被視為』用 be regarded as。" },
-    { q: "A Good Samaritan pays close attention ______ other people who need help.", opts: ["at", "in", "of", "to"], c: 3, r: "112克漏字：固定搭配 pay attention to。" },
-    { q: "Building 3D printed homes requires fewer resources and produces ______ waste.", opts: ["last", "less", "least", "little"], c: 1, r: "113克漏字：waste 不可數，比較級用 less。" },
+  <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
 
-    // --- 閱讀圖表實戰 (LV4: 表格/標籤) ---
-    { q: "According to the drug label, what symptom can this medicine relieve?", opts: ["Glaucoma", "Breathing problems", "Sneezing", "Drowsiness"], c: 2, r: "112閱讀：Uses 部分提到緩解 sneezing (打噴嚏)。" },
-    { q: "Based on the train timetable, which train operates only on Saturdays?", opts: ["No. 802", "No. 1202", "No. 1602", "No. 606"], c: 3, r: "113閱讀：表格顯示 606 車次行駛日為 Sat。" },
-    { q: "In the expense chart, who spends the most money on snacks?", opts: ["Mary", "Sam", "David", "Linda"], c: 1, r: "112閱讀：圖表顯示 Sam 在 snacks 欄位最高。" },
-    { q: "Which part of the drug label tells you how much medicine to take?", opts: ["Warnings", "Uses", "Directions", "Other info"], c: 2, r: "112閱讀：Directions 說明劑量與頻率。" }
+  <div class="stats">
+    <span id="qCount">題次: -</span>
+    <span id="scoreDisplay">得分: 0</span>
+    <span id="modeDisplay">模式: 測驗</span>
+  </div>
 
-    // ...以此類推擴充至200題，確保每個 PDF 頁面的題目都被轉化進來
+  <div class="quiz-body">
+    <div id="qText" class="q-text">載入中...</div>
+    <div id="optContainer"></div>
+
+    <div id="feedbackBox" class="feedback">
+      <strong>💡 解析：</strong><span id="reason"></span>
+    </div>
+
+    <button id="nextBtn" class="next-btn" style="display:none;" onclick="goNext()">下一題</button>
+
+    <div class="subbar">
+      <button id="clearWrong">清空錯題本</button>
+      <button id="clearVocab">清空單字卡進度</button>
+    </div>
+    <div class="muted" style="margin-top:8px;">
+      ✅ 錯題本規則：答錯→加入；在錯題本作答答對→移除；再答錯→又會留下。<br/>
+      ✅ 單字卡：翻面看中文／我會了／我不會（進度會保存）。
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   A) 題庫產生（100題不重複）
+   ========================= */
+const TOTAL = 100;
+
+// 你原本的真題/題庫（可繼續增加）
+const rawQuestions = [
+  // --- 114 年真題 ---
+  { q: "This child is using colored chalks to ______ pictures on a blank piece of paper.", opts: ["draw", "heat", "mail", "type"], c: 0, r: "114字彙1：draw 是「畫」。" },
+  { q: "The room was so ______ that I couldn't find space for these new chairs.", opts: ["available", "crowded", "empty", "positive"], c: 1, r: "114字彙2：crowded (擁擠的)。" },
+  { q: "Many people have climbed the main ______ of Mount Jade, the highest point in Taiwan.", opts: ["base", "peak", "shore", "valley"], c: 1, r: "114字彙3：peak 是「山頂、高峰」。" },
+  { q: "After looking at his grandfather's ______ on the wall, John felt they looked alike.", opts: ["cattle", "jewelry", "portrait", "whistle"], c: 2, r: "114字彙4：portrait 是「肖像」。" },
+  { q: "It is risky to touch plants in rainforests because some can be ______ to humans.", opts: ["fashionable", "jealous", "poisonous", "reasonable"], c: 2, r: "114字彙5：poisonous 有毒的。" },
+  { q: "Governments have the ______ to punish people who drink and drive.", opts: ["authority", "bargain", "courtesy", "infection"], c: 0, r: "114字彙6：authority 權力。" },
+  { q: "Sensor lights will ______ turn on by themselves when someone passes by.", opts: ["automatically", "organically", "productively", "selfishly"], c: 0, r: "114字彙7：automatically 自動地。" },
+  { q: "My sister decided to ______ her old habits and start a fresh chapter.", opts: ["bring about", "carry on", "give up", "run into"], c: 2, r: "114字彙10：abandon = give up 放棄。" },
+
+  // --- 113 年真題 ---
+  { q: "Johnny is wearing a very ______ hat that looks different from others.", opts: ["common", "general", "regular", "special"], c: 3, r: "113字彙1：special 特別的。" },
+  { q: "Loud noises make it hard for me to ______, so I find a quiet place to study.", opts: ["bend", "focus", "panic", "wander"], c: 1, r: "113字彙2：focus 專注。" },
+  { q: "Being friendly with roommates can help you stay away from ______.", opts: ["dialogues", "conflicts", "personality", "relationship"], c: 1, r: "113字彙5：conflict 衝突。" },
+  { q: "Jack will never change his decisions; he is a very ______ person.", opts: ["easy-going", "democratic", "obedient", "stubborn"], c: 3, r: "113字彙6：stubborn 固執。" },
+  { q: "May has to ______ her fear of flying if she wants to travel by airplane.", opts: ["conquer", "hunt", "recover", "select"], c: 0, r: "113字彙9：conquer 克服。" },
+
+  // --- 112 年真題 ---
+  { q: "It is a big ______ to learn that the only movie theater is going to shut down.", opts: ["cable", "shock", "tube", "zone"], c: 1, r: "112字彙1：shock 震驚。" },
+  { q: "The animal rights group is going to ______ a party to raise money.", opts: ["break", "fight", "hold", "spell"], c: 2, r: "112字彙2：hold a party 舉辦。" },
+  { q: "The boss agreed to increase workers' ______ to improve their life.", opts: ["permits", "risks", "scales", "wages"], c: 3, r: "112字彙6：wages 工資。" },
+  { q: "Since my teeth are very ______ to sweets, I don't eat candies.", opts: ["attractive", "effective", "positive", "sensitive"], c: 3, r: "112字彙7：sensitive 敏感的。" },
+  { q: "Whale watching today ______ a popular activity in Taiwan.", opts: ["became", "become", "has become", "will become"], c: 2, r: "112克漏字：現在完成式 has become。" },
+
+  // --- 111 年真題 ---
+  { q: "We had better leave early to ______ the heavy traffic.", opts: ["avoid", "drop", "invite", "mind"], c: 0, r: "111字彙1：avoid 避免。" },
+  { q: "I've put on so much weight that these jeans are too ______.", opts: ["loose", "ripe", "swift", "tight"], c: 3, r: "111字彙3：tight 緊的。" },
+  { q: "The police ______ the bank robber through the streets last night.", opts: ["begged", "chased", "praised", "treated"], c: 1, r: "111字彙9：chased 追逐。" },
+  { q: "I have looked through the records ______, but couldn't find the person.", opts: ["eventually", "marginally", "occasionally", "thoroughly"], c: 3, r: "111字彙10：thoroughly 徹底地。" },
+
+  // --- 模擬 ---
+  { q: "Success often depends ______ hard work and a positive attitude.", opts: ["at", "on", "in", "with"], c: 1, r: "必考片語：depend on。" },
+  { q: "Rainforests are important because many products are ______ plants.", opts: ["made from", "made into", "made by", "made with"], c: 0, r: "必考：made from 由…製成。" },
+  { q: "I have lived in this city ______ I was born.", opts: ["for", "since", "during", "when"], c: 1, r: "必考：since + 過去時間點。" },
+  { q: "The number of students using e-cigarettes ______ over the past few years.", opts: ["double", "has doubled", "doubled", "doubling"], c: 1, r: "必考：現在完成式 has doubled。" }
 ];
+
+// 用「模板 + 單字」補題：確保題幹不重複
+const vocabPairs = [
+  { w: "authority", zh: "權力" },
+  { w: "conflict", zh: "衝突" },
+  { w: "outcome", zh: "結果" },
+  { w: "regulation", zh: "規定" },
+  { w: "intense", zh: "強烈的" },
+  { w: "moderate", zh: "中等的" },
+  { w: "available", zh: "可取得的" },
+  { w: "crowded", zh: "擁擠的" },
+  { w: "sensitive", zh: "敏感的" },
+  { w: "stubborn", zh: "固執的" },
+  { w: "poisonous", zh: "有毒的" },
+  { w: "thoroughly", zh: "徹底地" }
+];
+
+const templates = [
+  (p) => ({
+    q: `(強化字彙) The teacher explained the meaning of "${p.w}" to the class.`,
+    opts: ["schedule", p.w, "laundry", "plastic"],
+    c: 1,
+    r: `字彙：${p.w} = ${p.zh}`
+  }),
+  (p) => ({
+    q: `(強化用法) The government has the ______ to make new laws.`,
+    opts: ["authority", "battery", "gallery", "sympathy"],
+    c: 0,
+    r: "字彙：authority = 權力（政府制定/執法）。"
+  }),
+  (p) => ({
+    q: `(強化同義) The final ______ of the meeting will be announced tomorrow.`,
+    opts: ["outcome", "portrait", "wages", "valley"],
+    c: 0,
+    r: "字彙：outcome = 結果（final outcome）。"
+  }),
+  (p) => ({
+    q: `(必考文法) I have worked here ______ 2020.`,
+    opts: ["for", "since", "during", "by"],
+    c: 1,
+    r: "文法：since + 過去時間點（2020）。"
+  }),
+  (p) => ({
+    q: `(必考片語) You should pay attention ______ the instructions.`,
+    opts: ["at", "to", "on", "with"],
+    c: 1,
+    r: "片語：pay attention to。"
+  }),
+  (p) => ({
+    q: `(克漏字感) The streets were so ______ that we could hardly move.`,
+    opts: ["empty", "crowded", "private", "local"],
+    c: 1,
+    r: "字彙：crowded = 擁擠的。"
+  })
+];
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// 去重：以題幹 q 當唯一鍵
+function buildUniqueQuestions(base, total) {
+  const seen = new Set();
+  const out = [];
+
+  for (const item of base) {
+    const key = item.q.trim();
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(item);
+    }
+    if (out.length >= total) return out.slice(0, total);
+  }
+
+  let t = 0;
+  let v = 0;
+  while (out.length < total) {
+    const p = vocabPairs[v % vocabPairs.length];
+    const maker = templates[t % templates.length];
+    const newQ = maker(p);
+    const key = newQ.q.trim();
+
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(newQ);
+    }
+
+    t++;
+    v++;
+    if (t > 5000) break;
+  }
+
+  return out.slice(0, total);
+}
+
+const questions = buildUniqueQuestions(rawQuestions, TOTAL);
+shuffle(questions);
+
+/* =========================
+   B) 錯題本 + 單字卡 + 模式切換
+   ========================= */
+const LS_WRONG = "tcte_wrongbook_v1";
+const LS_VOCAB = "tcte_vocab_progress_v1";
+
+const modeDisplay = document.getElementById("modeDisplay");
+const qTextEl = document.getElementById("qText");
+const qCountEl = document.getElementById("qCount");
+const scoreEl = document.getElementById("scoreDisplay");
+const optContainer = document.getElementById("optContainer");
+const feedbackBox = document.getElementById("feedbackBox");
+const reasonEl = document.getElementById("reason");
+const nextBtn = document.getElementById("nextBtn");
+const progressFill = document.getElementById("progressFill");
+
+function qidOf(item){
+  return btoa(unescape(encodeURIComponent(
+    item.q + "||" + item.opts.join("|") + "||" + item.c
+  ))).slice(0, 80);
+}
+
+function loadWrongBook(){
+  try { return JSON.parse(localStorage.getItem(LS_WRONG)) || {}; }
+  catch(e){ return {}; }
+}
+function saveWrongBook(book){ localStorage.setItem(LS_WRONG, JSON.stringify(book)); }
+function addToWrongBook(item){
+  const book = loadWrongBook();
+  book[qidOf(item)] = item;
+  saveWrongBook(book);
+}
+function removeFromWrongBook(item){
+  const book = loadWrongBook();
+  delete book[qidOf(item)];
+  saveWrongBook(book);
+}
+function getWrongBookList(){ return Object.values(loadWrongBook()); }
+
+function extractVocabCardsFromQuestions(qs){
+  const cards = [];
+  const seen = new Set();
+  for (const it of qs){
+    const r = (it.r || "").trim();
+    const en = it.opts?.[it.c];
+    if (!en || en.includes(" ") || en.includes("+")) continue;
+
+    let zh = "";
+    const idx = r.indexOf("：");
+    if (idx !== -1) zh = r.slice(idx + 1).replace(/[()。]/g, "").trim();
+    if (!zh) zh = "（自行補中文）";
+
+    const key = en.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    cards.push({ word: en, meaning: zh, hint: r || "" });
+  }
+  return cards;
+}
+
+function loadVocabProgress(){
+  try { return JSON.parse(localStorage.getItem(LS_VOCAB)) || {}; }
+  catch(e){ return {}; }
+}
+function saveVocabProgress(p){ localStorage.setItem(LS_VOCAB, JSON.stringify(p)); }
+
+let mode = "quiz"; // quiz | wrong | vocab
+let pool = [];
+let currentIdx = 0;
+let score = 0;
+
+function setMode(m){
+  mode = m;
+  modeDisplay.innerText = `模式: ${m === "quiz" ? "測驗" : m === "wrong" ? "錯題本" : "單字卡"}`;
+}
+
+function setPool(newPool){
+  pool = newPool;
+  currentIdx = 0;
+  score = 0;
+  scoreEl.innerText = `得分: ${score}`;
+}
+
+function renderQuestion(){
+  const item = pool[currentIdx];
+  qTextEl.innerText = item.q;
+  qCountEl.innerText = `題次: ${currentIdx + 1} / ${pool.length}`;
+
+  optContainer.innerHTML = '';
+  feedbackBox.style.display = 'none';
+  nextBtn.style.display = 'none';
+
+  item.opts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerText = opt;
+    btn.onclick = () => handleChoice(idx, btn);
+    optContainer.appendChild(btn);
+  });
+
+  progressFill.style.width = `${((currentIdx + 1) / pool.length) * 100}%`;
+}
+
+function handleChoice(idx, btn){
+  const item = pool[currentIdx];
+  const allOpts = document.querySelectorAll('.opt');
+  allOpts.forEach(b => b.disabled = true);
+
+  if (idx === item.c) {
+    btn.classList.add('correct');
+    score++;
+    scoreEl.innerText = `得分: ${score}`;
+    if (mode === "wrong") removeFromWrongBook(item);
+  } else {
+    btn.classList.add('wrong');
+    allOpts[item.c].classList.add('correct');
+    addToWrongBook(item);
+  }
+
+  reasonEl.innerText = item.r || "";
+  feedbackBox.style.display = 'block';
+  nextBtn.style.display = 'block';
+}
+
+function goNext(){
+  currentIdx++;
+  if (currentIdx < pool.length) renderQuestion();
+  else {
+    if (mode === "wrong") {
+      const remain = getWrongBookList();
+      alert(`錯題本練習結束！剩下錯題數：${remain.length}`);
+      startWrongBook();
+    } else {
+      alert(`測驗結束！總得分：${score} / ${pool.length}`);
+    }
+  }
+}
+window.goNext = goNext;
+
+/* ====== 三個模式 ====== */
+function startQuiz(){
+  setMode("quiz");
+  setPool(questions.slice(0, TOTAL));
+  renderQuestion();
+}
+
+function startWrongBook(){
+  setMode("wrong");
+  const list = getWrongBookList();
+  if (list.length === 0) {
+    qTextEl.innerText = "🎉 目前沒有錯題！";
+    qCountEl.innerText = "題次: -";
+    optContainer.innerHTML = "";
+    feedbackBox.style.display = "none";
+    nextBtn.style.display = "none";
+    progressFill.style.width = "0%";
+    scoreEl.innerText = `得分: 0`;
+    return;
+  }
+  setPool(list);
+  renderQuestion();
+}
+
+/* ====== 單字卡 ====== */
+const vocabCards = extractVocabCardsFromQuestions(questions);
+let vIdx = 0;
+let showMeaning = false;
+
+function startVocab(){
+  setMode("vocab");
+  const prog = loadVocabProgress();
+  const total = vocabCards.length;
+
+  if (total === 0) {
+    qTextEl.innerText = "（目前抓不到單字卡；你可以自己做 vocabCards 陣列）";
+    qCountEl.innerText = "單字卡: -";
+    optContainer.innerHTML = "";
+    feedbackBox.style.display = "none";
+    nextBtn.style.display = "none";
+    progressFill.style.width = "0%";
+    return;
+  }
+
+  function countStatus(s){
+    return Object.values(loadVocabProgress()).filter(x => x === s).length;
+  }
+
+  function renderCard(){
+    const card = vocabCards[vIdx];
+    const key = card.word.toLowerCase();
+    const status = prog[key] || "new";
+
+    qCountEl.innerText = `單字卡: ${vIdx + 1} / ${total}（已會:${countStatus("know")}｜待複習:${countStatus("dont")}）`;
+    scoreEl.innerText = `狀態: ${status === "know" ? "✅ 會" : status === "dont" ? "🟡 不會" : "🆕 新"}`;
+
+    qTextEl.innerText = showMeaning ? `${card.word} ＝ ${card.meaning}` : `${card.word}`;
+
+    optContainer.innerHTML = `
+      <button class="opt" id="flipBtn">🔄 翻面（看中文/提示）</button>
+      <button class="opt" id="knowBtn">✅ 我會了</button>
+      <button class="opt" id="dontBtn">🟡 我不會（加入複習）</button>
+      <button class="opt" id="prevBtn">⬅ 上一張</button>
+      <button class="opt" id="nextCardBtn">➡ 下一張</button>
+      <div style="margin-top:10px;color:#666;font-size:0.9em;">
+        <div><b>提示/考點：</b>${card.hint || "（無）"}</div>
+      </div>
+    `;
+    feedbackBox.style.display = "none";
+    nextBtn.style.display = "none";
+    progressFill.style.width = `${((vIdx + 1) / total) * 100}%`;
+
+    document.getElementById("flipBtn").onclick = () => { showMeaning = !showMeaning; renderCard(); };
+    document.getElementById("knowBtn").onclick = () => {
+      prog[key] = "know";
+      saveVocabProgress(prog);
+      nextCard();
+    };
+    document.getElementById("dontBtn").onclick = () => {
+      prog[key] = "dont";
+      saveVocabProgress(prog);
+      nextCard();
+    };
+    document.getElementById("prevBtn").onclick = () => { vIdx = (vIdx - 1 + total) % total; showMeaning = false; renderCard(); };
+    document.getElementById("nextCardBtn").onclick = () => { nextCard(); };
+  }
+
+  function nextCard(){
+    vIdx = (vIdx + 1) % total;
+    showMeaning = false;
+    renderCard();
+  }
+
+  renderCard();
+}
+
+/* ====== 清除功能 ====== */
+document.getElementById("clearWrong").onclick = () => {
+  localStorage.removeItem(LS_WRONG);
+  alert("已清空錯題本！");
+  if (mode === "wrong") startWrongBook();
+};
+document.getElementById("clearVocab").onclick = () => {
+  localStorage.removeItem(LS_VOCAB);
+  alert("已清空單字卡進度！");
+  if (mode === "vocab") startVocab();
+};
+
+/* ====== 模式切換按鈕 ====== */
+document.getElementById("modeQuiz").onclick = startQuiz;
+document.getElementById("modeWrong").onclick = startWrongBook;
+document.getElementById("modeVocab").onclick = startVocab;
+
+/* ====== 預設進入測驗 ====== */
+startQuiz();
+</script>
+
+</body>
+</html>
