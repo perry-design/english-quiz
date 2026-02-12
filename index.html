@@ -1,6 +1,103 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英文統測題庫</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f4f6fb;
+  margin:0;
+  padding:20px;
+}
+.container{
+  max-width:600px;
+  margin:auto;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+button{
+  display:block;
+  width:100%;
+  margin:8px 0;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  cursor:pointer;
+}
+.correct{
+  background:#4caf50;
+  color:white;
+}
+.wrong{
+  background:#f44336;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h2 id="question"></h2>
+  <div id="options"></div>
+  <p id="result"></p>
+</div>
+
+<script>
+
+const questions = [
+  {
+    q:"It is a big ______ for people to learn that the only movie theater is going to shut down.",
+    opts:["cable","shock","tube","zone"],
+    c:1
+  },
+  {
+    q:"Loud noises make it hard for me to ______.",
+    opts:["bend","focus","panic","wander"],
+    c:1
+  }
+];
+
+let current = 0;
+
+function loadQuestion(){
+  const q = questions[current];
+  document.getElementById("question").innerText = q.q;
+  const optDiv = document.getElementById("options");
+  optDiv.innerHTML="";
+  q.opts.forEach((opt,i)=>{
+    const btn = document.createElement("button");
+    btn.innerText = opt;
+    btn.onclick = ()=>checkAnswer(i);
+    optDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(i){
+  const buttons = document.querySelectorAll("button");
+  if(i === questions[current].c){
+    buttons[i].classList.add("correct");
+    document.getElementById("result").innerText="答對了！";
+  }else{
+    buttons[i].classList.add("wrong");
+    document.getElementById("result").innerText="答錯了";
+  }
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>111-114 統測英文終極題庫（100題）＋錯題本＋單字卡</title>
