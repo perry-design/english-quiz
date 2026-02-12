@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統測英文高頻考點練習</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --secondary: #f39c12;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --bg: #f5f7fa;
+        }
+        body { font-family: 'PingFang TC', sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 20px; }
+        .quiz-container { background: white; width: 100%; max-width: 500px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 20px; }
+        .header { text-align: center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .progress { font-size: 0.9em; color: #666; margin-bottom: 10px; }
+        .question { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; line-height: 1.5; color: #2c3e50; }
+        .options { display: grid; gap: 10px; }
+        .option-btn { 
+            padding: 15px; border: 2px solid #eee; border-radius: 10px; background: white; cursor: pointer;
+            transition: 0.3s; font-size: 1em; text-align: left;
+        }
+        .option-btn:hover { background: #f0f7ff; border-color: var(--primary); }
+        .option-btn.correct { background: var(--success); color: white; border-color: var(--success); }
+        .option-btn.wrong { background: var(--danger); color: white; border-color: var(--danger); }
+        .feedback { margin-top: 20px; padding: 15px; border-radius: 10px; display: none; }
+        .feedback.show { display: block; background: #e8f4fd; border-left: 5px solid var(--primary); }
+        .next-btn { 
+            width: 100%; margin-top: 20px; padding: 15px; border: none; border-radius: 10px;
+            background: var(--primary); color: white; font-size: 1.1em; cursor: pointer; display: none;
+        }
+        .result-screen { text-align: center; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="quiz-app">
+    <div id="question-screen">
+        <div class="header">
+            <h3>📝 統測英文模擬考</h3>
+            <div class="progress" id="progress">第 1 題 / 共 50 題</div>
+        </div>
+        <div class="question" id="question-text">載入中...</div>
+        <div class="options" id="options-container"></div>
+        <div class="feedback" id="feedback">
+            <strong>解析：</strong> <span id="explanation"></span>
+        </div>
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">下一題</button>
+    </div>
+
+    <div id="result-screen" class="result-screen">
+        <h2>🎉 練習完成！</h2>
+        <p id="score-text" style="font-size: 1.5em;"></p>
+        <button class="next-btn" style="display:block;" onclick="location.reload()">再測一次</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "The government decided to ______ the use of plastic straws to protect the environment.", options: ["ban", "abandon", "indicate", "dedicate"], correct: 0, reason: "ban 是「禁止」。政府為了環保應是禁塑。" },
+        { q: "Since the new policy was implemented, the number of tourists ______ significantly.", options: ["increases", "increased", "has increased", "increasing"], correct: 2, reason: "Since 搭配「現在完成式」(has/have + p.p.)，表示持續到現在的變化。" },
+        { q: "Success often depends ______ hard work and a positive attitude.", options: ["at", "on", "in", "with"], correct: 1, reason: "depend on 為固定搭配，意為「取決於」。" },
+        { q: "The movie was so ______ that I couldn't stop thinking about it.", options: ["moderate", "intense", "rude", "stubborn"], correct: 1, reason: "intense 是「強烈的」，符合讓人印象深刻的情境。" },
+        { q: "Compared to plastic, using recycled paper results in ______ waste.", options: ["fewer", "less", "many", "as little as"], correct: 1, reason: "waste 為不可數名詞，比較級應使用 less。" }
+        // ... 你可以把剩下的 45 題按這個格式貼進來
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+
+    function loadQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById("progress").innerText = `第 ${currentIdx + 1} 題 / 共 ${questions.length} 題`;
+        document.getElementById("question-text").innerText = q.q;
+        const optionsDiv = document.getElementById("options-container");
+        optionsDiv.innerHTML = "";
+        document.getElementById("feedback").classList.remove("show");
+        document.getElementById("next-btn").style.display = "none";
+
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(i, btn);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedIdx, btn) {
+        const q = questions[currentIdx];
+        const allBtns = document.querySelectorAll(".option-btn");
+        
+        // 禁點其他按鈕
+        allBtns.forEach(b => b.style.pointerEvents = "none");
+
+        if (selectedIdx === q.correct) {
+            btn.classList.add("correct");
+            score++;
+        } else {
+            btn.classList.add("wrong");
+            allBtns[q.correct].classList.add("correct");
+        }
+
+        document.getElementById("explanation").innerText = q.reason;
+        document.getElementById("feedback").classList.add("show");
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById("question-screen").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("score-text").innerText = `你的得分：${score} / ${questions.length}`;
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
